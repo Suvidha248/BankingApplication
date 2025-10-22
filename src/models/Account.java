@@ -35,6 +35,11 @@ public abstract class Account {
 
 		
 	 }
+	 
+	 protected void updateBalance(double newBalance) {
+		    this.balance = newBalance;
+	 }
+	 
 	 private static int nextAccountNumber = 2486;
 
 	 private String generateAccountNumber() {
