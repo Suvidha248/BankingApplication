@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import exceptions.InsufficientFundsException;
 import utils.TransactionType;
 
 public abstract class Account {
@@ -21,13 +22,13 @@ public abstract class Account {
 		
 		this.accountNumber = generateAccountNumber();
 		this.accountHolderName = accountHolderName;
-		this.balance = balance;
+		this.balance = initialDeposit;
 		this.transactionHistory = new ArrayList<>();
 		this.dateCreated = dateCreated;
 		
 		recordTransaction(TransactionType.DEPOSIT, initialDeposit, "Initial Deposit");
 	 }
-	 private void recordTransaction(TransactionType type, double amount, String description) {
+	 protected void recordTransaction(TransactionType type, double amount, String description) {
 		    
 		 Transaction txn = new Transaction(type, amount, balance, description);
 		    transactionHistory.add(txn);
@@ -51,7 +52,7 @@ public abstract class Account {
 		 
 	 }
 	 
-	 public void withdraw(double amount)
+	 public void withdraw(double amount) throws InsufficientFundsException
 	 {
 		 if(amount<=0) {
 			 throw new IllegalArgumentException("withdrawal should be greater than zero");

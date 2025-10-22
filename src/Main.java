@@ -1,6 +1,7 @@
 import java.time.LocalDateTime;
 
 import models.Account;
+import models.SavingsAccount;
 import models.Transaction;
 import utils.TransactionType;
 
@@ -43,8 +44,24 @@ public class Main {
 //        } catch (IllegalArgumentException e) {
 //            System.out.println("✓ Validation working! Error caught: " + e.getMessage());
 //        }
-		 Account a1 = new Account("Alice", 1000);
-		 System.out.println(a1.getBalance());
+        // Create a SavingsAccount object
+        SavingsAccount a1 = new SavingsAccount("Alice", 1000, 0.04, 500);
+
+        // Test deposit
+        a1.deposit(500);
+        System.out.println("Balance after deposit: $" + a1.getBalance());
+
+        // Test withdraw (should fail if below minimum)
+        a1.withdraw(1200);
+        System.out.println("Balance after withdrawal attempt: $" + a1.getBalance());
+
+        // Calculate interest
+        a1.calculateInterest();
+        System.out.println("Balance after interest: $" + a1.getBalance());
+
+        // Print transaction history
+        System.out.println("\nTransaction History:");
+        a1.getTransactionHistory().forEach(System.out::println);
 
 	}
 	

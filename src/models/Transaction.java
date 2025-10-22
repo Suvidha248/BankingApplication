@@ -20,19 +20,13 @@ public class Transaction {
     // Constructor with validation
     public Transaction(TransactionType type, double amount, 
                        double balanceAfter, String description) {
-        
+
         // Validation
-        if (transactionId == null || transactionId.trim().isEmpty()) {
-            throw new IllegalArgumentException("Transaction ID cannot be null or empty");
-        }
         if (type == null) {
             throw new IllegalArgumentException("Transaction type cannot be null");
         }
         if (amount <= 0) {
             throw new IllegalArgumentException("Amount must be positive");
-        }
-        if (timestamp == null) {
-            throw new IllegalArgumentException("Timestamp cannot be null");
         }
         
         // Assignment
@@ -42,6 +36,8 @@ public class Transaction {
         this.balanceAfter = balanceAfter;
         this.timestamp = LocalDateTime.now();
         this.description = description;
+        
+        
     }
     
     // Static method to generate unique transaction IDs
