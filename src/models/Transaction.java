@@ -18,8 +18,8 @@ public class Transaction {
     private static int transactionCounter = 1000;
     
     // Constructor with validation
-    public Transaction(String transactionId, TransactionType type, double amount, 
-                       double balanceAfter, LocalDateTime timestamp, String description) {
+    public Transaction(TransactionType type, double amount, 
+                       double balanceAfter, String description) {
         
         // Validation
         if (transactionId == null || transactionId.trim().isEmpty()) {
@@ -36,11 +36,11 @@ public class Transaction {
         }
         
         // Assignment
-        this.transactionId = transactionId;
+        this.transactionId = generateTransactionId();
         this.type = type;
         this.amount = amount;
         this.balanceAfter = balanceAfter;
-        this.timestamp = timestamp;
+        this.timestamp = LocalDateTime.now();
         this.description = description;
     }
     
