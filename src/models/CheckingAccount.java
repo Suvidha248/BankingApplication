@@ -1,6 +1,7 @@
 package models;
 
 import exceptions.InsufficientFundsException;
+import utils.TransactionType;
 
 public class CheckingAccount extends Account {
 
@@ -49,8 +50,15 @@ public class CheckingAccount extends Account {
             );
         }
         
-        // Allow the withdrawal (even if it makes balance negative)
-        super.withdraw(amount);
+//        // Allow the withdrawal (even if it makes balance negative)
+//        super.withdraw(amount);
+        
+        // Manually update balance (bypass parent's balance check)
+        updateBalance(getBalance() - amount);
+        
+        // Record transaction
+        recordTransaction(TransactionType.WITHDRAWAL, amount, "Withdrawal");
+        
         transactionsThisMonth++;
         applyTransactionFee();
     }
