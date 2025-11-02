@@ -308,6 +308,33 @@
 //        }
 //    }
 //}
+//import services.BankService;
+//import exceptions.*;
+//
+//public class Main {
+//    public static void main(String[] args) {
+//        BankService bank = new BankService();
+//
+//        String acc1 = bank.createSavingsAccount("Alice", 1000, 0.03, 500);
+//        String acc2 = bank.createCheckingAccount("Bob", 500, 200);
+//
+//        System.out.println("Created Accounts:");
+//        System.out.println("Alice -> " + acc1);
+//        System.out.println("Bob -> " + acc2);
+//
+//        try {
+//            bank.deposit(acc1, 300);
+//            bank.withdraw(acc2, 100);
+//            bank.transfer(acc1, acc2, 200);
+//
+//            System.out.println("Alice Balance: $" + bank.checkBalance(acc1));
+//            System.out.println("Bob Balance: $" + bank.checkBalance(acc2));
+//
+//        } catch (AccountNotFoundException | InsufficientFundsException e) {
+//            System.out.println(e.getMessage());
+//        }
+//    }
+//}
 import services.BankService;
 import exceptions.*;
 
@@ -315,23 +342,102 @@ public class Main {
     public static void main(String[] args) {
         BankService bank = new BankService();
 
-        String acc1 = bank.createSavingsAccount("Alice", 1000, 0.03, 500);
-        String acc2 = bank.createCheckingAccount("Bob", 500, 200);
-
-        System.out.println("Created Accounts:");
-        System.out.println("Alice -> " + acc1);
-        System.out.println("Bob -> " + acc2);
+        System.out.println("╔════════════════════════════════════════════════════════════════╗");
+        System.out.println("║              BANKSERVICE - COMPREHENSIVE TEST                  ║");
+        System.out.println("╚════════════════════════════════════════════════════════════════╝\n");
 
         try {
-            bank.deposit(acc1, 300);
-            bank.withdraw(acc2, 100);
-            bank.transfer(acc1, acc2, 200);
+            // TEST 1: Create Accounts
+            System.out.println("--- TEST 1: Create Accounts ---");
+            String acc1 = bank.createSavingsAccount("Alice Johnson", 2000, 0.05, 1000);
+            String acc2 = bank.createCheckingAccount("Bob Smith", 1500, 300);
+            String acc3 = bank.createSavingsAccount("Charlie Brown", 5000, 0.04, 2000);
+            System.out.println("Total accounts: " + bank.getAccountCount());
+            System.out.println();
 
-            System.out.println("Alice Balance: $" + bank.checkBalance(acc1));
-            System.out.println("Bob Balance: $" + bank.checkBalance(acc2));
+            // TEST 2: Deposit
+            System.out.println("--- TEST 2: Deposit Operations ---");
+            bank.deposit(acc1, 500);
+            System.out.println("Alice's balance: $" + bank.checkBalance(acc1));
+            System.out.println();
 
-        } catch (AccountNotFoundException | InsufficientFundsException e) {
-            System.out.println(e.getMessage());
+            // TEST 3: Withdraw
+            System.out.println("--- TEST 3: Withdraw Operations ---");
+            bank.withdraw(acc2, 200);
+            System.out.println("Bob's balance: $" + bank.checkBalance(acc2));
+            System.out.println();
+
+            // TEST 4: Transfer
+            System.out.println("--- TEST 4: Transfer Between Accounts ---");
+            System.out.println("Before transfer:");
+            System.out.println("  Alice: $" + bank.checkBalance(acc1));
+            System.out.println("  Bob: $" + bank.checkBalance(acc2));
+
+            bank.transfer(acc1, acc2, 800);
+
+            System.out.println("After transfer:");
+            System.out.println("  Alice: $" + bank.checkBalance(acc1));
+            System.out.println("  Bob: $" + bank.checkBalance(acc2));
+            System.out.println();
+
+            // TEST 5: Apply Interest
+            System.out.println("--- TEST 5: Apply Interest to Savings ---");
+            System.out.println("Alice's balance before interest: $" + bank.checkBalance(acc1));
+            bank.applyInterestToSavings(acc1);
+            System.out.println("Alice's balance after interest: $" + bank.checkBalance(acc1));
+            System.out.println();
+
+            // TEST 6: Apply Interest to All Savings
+            System.out.println("--- TEST 6: Apply Interest to All Savings Accounts ---");
+            bank.applyInterestToAllSavings();
+            System.out.println();
+
+            // TEST 7: Search by Name
+            System.out.println("--- TEST 7: Search Accounts ---");
+            var results = bank.searchAccountsByName("alice");
+            System.out.println("Search results for 'alice': " + results.size() + " found");
+            for (var acc : results) {
+                System.out.println("  " + acc);
+            }
+            System.out.println();
+
+            // TEST 8: Get Accounts by Type
+            System.out.println("--- TEST 8: Filter by Account Type ---");
+            System.out.println("Savings accounts: " + bank.getSavingsAccounts().size());
+            System.out.println("Checking accounts: " + bank.getCheckingAccounts().size());
+            System.out.println();
+
+            // TEST 9: Account Statement
+            System.out.println("--- TEST 9: Print Account Statement ---");
+            bank.printAccountStatement(acc1);
+
+            // TEST 10: List All Accounts
+            System.out.println("--- TEST 10: List All Accounts ---");
+            bank.printAllAccounts();
+
+            // TEST 11: Exception Handling
+            System.out.println("--- TEST 11: Exception Handling ---");
+            try {
+                bank.deposit("INVALID123", 100);
+            } catch (AccountNotFoundException e) {
+                System.out.println("✓ Correctly caught: " + e.getMessage());
+            }
+
+            try {
+                bank.transfer(acc1, acc1, 100);
+            } catch (IllegalArgumentException e) {
+                System.out.println("✓ Correctly caught: " + e.getMessage());
+            }
+
+            try {
+                bank.applyInterestToSavings(acc2);  // acc2 is checking
+            } catch (IllegalArgumentException e) {
+                System.out.println("✓ Correctly caught: " + e.getMessage());
+            }
+
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 }
